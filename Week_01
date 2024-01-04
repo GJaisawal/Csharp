@@ -1,0 +1,13 @@
+#Week 01 (Easy) :
+
+01. Create an array of size n of integers. Take input from the user for these n elements and print the array after that. {Done}
+02. Check whether n is present in an array of size m or not. Return true or false. {Done}
+03. Find the minimum and maximum element in an array. {Done}
+04. Write a program to reverse the array. {Done}
+05. Write a program to sort the given array. (Use bubble sort) {Done}
+
+#Week 01 (Medium) :
+
+06. Find the Kth largest andd Kth smallest element in an array. {Done}
+07. Given a number n. Find the number of occurences of n in the array. {Done}
+08. Given an array which consists of 0,1 and 2 only. Sort the array. {Done}
