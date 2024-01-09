@@ -1,0 +1,45 @@
+# Take userInput in List and Display LIst
+
+using System;
+using System.Collections.Generic;
+
+class Arithmetic
+{
+    public static void Main()
+    {
+        List<int> integerList = ReadAndParseIntegers();
+        DisplayListElements(integerList);
+    }
+
+    static List<int> ReadAndParseIntegers()
+    {
+        Console.Write("Enter integers separated by spaces: ");
+        string userInput = Console.ReadLine();
+
+        string[] inputArray = userInput.Split(' ');
+        List<int> integerList = new List<int>();
+
+        foreach (string input in inputArray)
+        {
+            if (int.TryParse(input, out int number))
+            {
+                integerList.Add(number);
+            }
+            else
+            {
+                Console.WriteLine($"Invalid input: {input} is not a valid integer.");
+            }
+        }
+
+        return integerList;
+    }
+
+    static void DisplayListElements(List<int> integerList)
+    {
+        Console.WriteLine("\nElements in the list:");
+        foreach (int number in integerList)
+        {
+            Console.WriteLine(number);
+        }
+    }
+}
