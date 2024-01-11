@@ -1,0 +1,11 @@
+#String
+
+// Take user input
+        Console.Write("Enter a string: ");
+        string userInput = Console.ReadLine();
+
+// Convert string to charArray
+        char[] charArray = userInput(StringName).ToCharArray();
+
+// Reverse Array
+        Array.Reverse(charArray)
