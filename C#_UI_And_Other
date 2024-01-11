@@ -9,3 +9,24 @@
 
 // Reverse Array
         Array.Reverse(charArray)
+
+
+
+
+
+
+
+        int start = 0;
+        int end = charArray.Length - 1;
+
+        while (start < end)
+        {
+            // Swap characters at the start and end positions
+            char temp = charArray[start];
+            charArray[start] = charArray[end];
+            charArray[end] = temp;
+
+            // Move towards the center of the array
+            start++;
+            end--;
+        }
