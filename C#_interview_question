@@ -1,1 +1,61 @@
-
+What is the difference between static, public, and void?
+What is an object?
+oops.
+Define Constructors.
+What is inheritance? Does C# support multiple inheritance? 2
+What is Common Language Runtime (CLR)? 2
+What are Jagged Arrays? 2
+What is the difference between out and ref parameters? 3
+What is serialization?
+this keyword.
+Break and Continue.
+Constructor Chaining in C#? 
+different types of comments in C#.
+namespaces in C#? 2
+various methods to pass parameters in a method.
+Indexers in C#?
+JIT compiler process?
+Reflection in C#? 2
+enum in C#?
+Access modifiers.
+types of classes in C#? Abstract Class. 3
+Differentiate between finally blocks and finalize.
+Interface? and Interface class.
+difference between an abstract and interface class? 3
+Partial Class?
+difference between read-only and constants? 2
+extension methods in C#? 2
+Boxing and Unboxing in C#?
+Reflection in C#?
+Sealed class.
+difference between a Struct and a Class? 2
+Method overloading and method overriding.
+difference between Arraylist and Array?
+difference between “is” and “as” operators in c#? 2
+Equality Operator (==) and Equals() Method in C#?
+Is it possible for a private virtual method to be overridden?
+differences between System.String and System.Text.StringBuilder classes? 3
+difference between the System.Array.CopyTo() and System.Array.Clone() ? 2
+difference between Dispose() and Finalize()methods?
+What are generics in C# .NET?
+tuple in C#? 2
+Events?
+circular references?
+object pool in .NET?
+Multithreading with .NET? 2
+Thread Pooling in C#?
+garbage collection in C#? 2
+delegates?
+multicast delegate?
+Virtual Method in C#?
+distinction between "throw" and "throw ex" in.NET?
+In C#, how do you implement the singleton design pattern?
+Console application?
+Hash table class?
+LINQ in C#?
+Race condition in C#?
+Regular expressions in C#? 
+Can multiple catch blocks be executed?
+Get and Set Accessor properties?
+XSD file in C#?
+Difference between SortedList and SortedDictionary in C#.
