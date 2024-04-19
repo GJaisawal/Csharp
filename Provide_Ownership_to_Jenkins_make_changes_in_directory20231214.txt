@@ -1,0 +1,75 @@
+1. Identify the Target Directory:
+Determine the directory where you want Jenkins to create files and directories. For example, let's say it's /jenkinstest.
+
+Create the Directory:
+Ensure that the target directory exists. You can create it using the following command:
+
+      bash
+
+      sudo mkdir /jenkinstest
+
+2. Grant Ownership to Jenkins User:
+Change the ownership of the directory to the Jenkins user. Replace jenkins with the actual Jenkins user if it's different on your system.
+
+       bash
+
+       sudo chown -R jenkins:jenkins /jenkinstest
+
+Grant Write Permissions:
+Provide write permissions to the Jenkins user for the directory. This allows Jenkins to create files and subdirectories.
+
+       bash
+
+       sudo chmod -R 755 /jenkinstest
+
+If you want Jenkins to have full control over the directory, you can use sudo chmod -R 777 /var/jenkins_workspace. 
+However, be cautious with this approach, as it grants full access to everyone, and it might not be the most secure option.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sample Pipeline : 
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Create Directories') {
+            steps {
+                script {
+                    // Use your absolute path for directory A
+                    sh 'mkdir -p /jenkinstest/jenkinstet/A'
+                    // Use your absolute path for directory B
+                    sh 'mkdir -p /jenkinstest/jenkinstet/B'
+                }
+            }
+        }
+
+        stage('Create and Move File') {
+            steps {
+                script {
+                    // Create a file in directory A
+                    sh 'echo "Hello, Jenkins!" > /jenkinstest/jenkinstet/A/sample.txt'
+                    
+                    // Move the file from directory A to directory B
+                    sh 'mv /jenkinstest/jenkinstet/A/sample.txt /jenkinstest/jenkinstet/B/'
+                }
+            }
+        }
+    }
+}

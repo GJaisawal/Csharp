@@ -1,0 +1,266 @@
+
+setup kafka with kubernatics multi cluster
+
+Step 1: Install Docker on both machines
+
+bash
+
+sudo apt update
+sudo apt install docker.io
+sudo systemctl enable --now docker
+
+Step 2: Install kubeadm, kubelet, and kubectl on both machines
+
+bash
+
+sudo apt update
+sudo apt install -y kubelet kubeadm kubectl                                       (alternate way if any error occur        snap install kubeadm --classic
+																														   snap install kubectl --classic )
+
+Step 3: Disable swap on both machines
+
+Edit the /etc/fstab file and comment out the swap line:
+
+bash
+
+sudo nano /etc/fstab
+# Comment out the line that looks like /swap.img
+
+Disable the swap temporarily:
+
+bash
+
+sudo swapoff -a
+
+Step 4: Initialize Cluster1 (Master)
+
+On the first machine (Cluster1), run the following commands:
+
+bash
+
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+
+After the initialization is complete, follow the instructions provided by kubeadm to set up kubectl and join nodes.
+Step 5: Set up Cluster1 networking
+
+On Cluster1, run the following commands to apply a networking solution. For example, Calico:
+
+bash
+
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+
+Step 6: Join Cluster2 to Cluster1
+
+On the second machine (Cluster2), join it to Cluster1 by running the command provided by the kubeadm init output on Cluster1:
+
+bash
+
+sudo kubeadm join <Cluster1_IP>:<Port> --token <Token> --discovery-token-ca-cert-hash sha256:<Hash>
+
+Step 7: Verify the clusters
+
+On Cluster1, check if both nodes are ready:
+
+bash
+
+kubectl get nodes
+
+This should show both Cluster1 and Cluster2 as "Ready."
+Step 8: Repeat steps for additional nodes (optional)
+
+If you want to add more nodes to either Cluster1 or Cluster2, repeat the process by initializing the node using kubeadm init and joining it to the respective cluster.
+
+
+Prerequisites:
+
+    Kubernetes clusters (Cluster1, Cluster2, etc.) are set up.
+    Helm is installed on your management machine.
+
+Step 1: Add Helm Repository for Strimzi
+
+bash
+
+helm repo add strimzi https://strimzi.io/charts/
+helm repo update
+
+Step 2: Install Strimzi Kafka Operator
+
+bash
+
+# On each cluster
+kubectl create namespace kafka
+kubectl apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.25.0/strimzi-cluster-operator-0.25.0.yaml -n kafka
+
+Step 3: Deploy Kafka Cluster on Each Cluster
+
+Create a file named kafka-values.yaml with the following content:
+
+yaml
+
+kafka:
+  replicas: 3
+  listeners:
+    plain: {}
+    tls: {}
+  storage:
+    type: ephemeral
+
+Install Kafka using Helm:
+
+bash
+
+# On each cluster
+helm install kafka strimzi/strimzi-kafka-operator -n kafka --values kafka-values.yaml
+
+Step 4: Expose Kafka Services
+
+bash
+
+# On each cluster
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-bootstrap
+  namespace: kafka
+spec:
+  selector:
+    strimzi.io/cluster: "kafka"
+    strimzi.io/kind: "Kafka"
+    strimzi.io/name: "kafka"
+  ports:
+    - protocol: TCP
+      port: 9092
+      targetPort: 9092
+EOF
+
+Step 5: Configure Inter-Cluster Communication
+
+Exchange the Kafka bootstrap service IP addresses between clusters.
+
+bash
+
+# On Cluster1
+kubectl get svc kafka-bootstrap -n kafka -o jsonpath='{.spec.clusterIP}' > cluster1-bootstrap-ip.txt
+
+# On Cluster2
+kubectl get svc kafka-bootstrap -n kafka -o jsonpath='{.spec.clusterIP}' > cluster2-bootstrap-ip.txt
+
+Step 6: Set Up Kafka Producer and Consumer Pods
+
+Create a Kafka producer and consumer YAML file. Replace <bootstrap-ip> with the appropriate Kafka bootstrap IP:
+
+yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kafka-producer
+spec:
+  containers:
+  - name: kafka-producer
+    image: strimzi/kafka:0.25.0-kafka-2.8.0
+    command:
+      - sh
+      - -c
+      - "bin/kafka-console-producer.sh --broker-list <bootstrap-ip>:9092 --topic test"
+  restartPolicy: Never
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kafka-consumer
+spec:
+  containers:
+  - name: kafka-consumer
+    image: strimzi/kafka:0.25.0-kafka-2.8.0
+    command:
+      - sh
+      - -c
+      - "bin/kafka-console-consumer.sh --bootstrap-server <bootstrap-ip>:9092 --topic test --from-beginning"
+  restartPolicy: Never
+
+Apply the YAML file on each cluster:
+
+bash
+
+kubectl apply -f kafka-producer-consumer.yaml
+
+Step 7: Test Inter-Cluster Communication
+
+In one terminal, watch the consumer pod:
+
+bash
+
+kubectl logs -f kafka-consumer
+
+In another terminal, exec into the producer pod:
+
+bash
+
+kubectl exec -it kafka-producer -- /bin/sh
+
+Inside the producer pod, type messages. You should see them appearing in the consumer pod.
+
+Repeat Steps 6 and 7 on other clusters, changing the bootstrap IP.
+
+
+Step 1: Download and Install Helm
+
+    Open a terminal on your Ubuntu machine.
+
+    Download the latest Helm binary from the official Helm GitHub repository:
+
+    bash
+
+wget https://get.helm.sh/helm-v3.7.0-linux-amd64.tar.gz
+
+Note: You should check the Helm GitHub releases page to get the latest version link.
+
+Extract the downloaded archive:
+
+bash
+
+tar -zxvf helm-v3.7.0-linux-amd64.tar.gz
+
+Move the helm binary to a directory in your system's PATH. For example, you can move it to /usr/local/bin:
+
+bash
+
+    sudo mv linux-amd64/helm /usr/local/bin/helm
+
+Step 2: Verify Helm Installation
+
+After installation, you can verify that Helm is installed correctly by running the following command:
+
+bash
+
+helm version
+
+This should display the Helm version information.
+Step 3: Initialize Helm
+
+Initialize Helm on your Kubernetes cluster. This involves installing the Tiller server-side component, which is part of Helm (Note: Helm v3 no longer requires Tiller):
+
+bash
+
+helm init --upgrade
+
+Step 4: Verify Helm Initialization
+
+Ensure that Helm has been initialized successfully by checking the Helm and Tiller components:
+
+bash
+
+helm version
+
+This should show both the client and server versions. Helm v3 no longer uses Tiller, so you might see a message indicating that Tiller is deprecated.
+Step 5: Optional - Add Helm Repositories
+
+You can add Helm repositories to access charts for different applications. For example, you can add the official stable repository:
+
+bash
+
+helm repo add stable https://charts.helm.sh/stable

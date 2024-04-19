@@ -1,0 +1,17 @@
+    Here are the steps to set up job scheduling in Jenkins:
+	
+	
+    1. Open your Jenkins dashboard in a web browser.
+
+    2. Navigate to the Job Configuration:
+        > If you are creating a new job, click on "New Item" on the Jenkins dashboard.
+        > If you are modifying an existing job, click on the job's name.
+
+    3. Configure the Build Trigger:
+        > Scroll down to the "Build Triggers" section.
+        > Check the option that corresponds to the scheduling method you want. Common options include:
+            > Build periodically: This option allows you to specify a cron-like schedule. For example, to run the job every day at 2 AM, you can use H 2 * * *.
+            > Poll SCM: Jenkins will periodically check your version control system for changes, and if changes are detected, it will trigger a build.
+
+    4. Save the Configuration:
+        > Scroll to the bottom of the configuration page and click on the "Save" or "Apply" button to save your changes.

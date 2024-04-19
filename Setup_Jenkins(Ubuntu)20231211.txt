@@ -1,0 +1,27 @@
+# check java installed or not in your system with below command
+1. java --version
+
+# if java not installed, install it
+2. sudo apt install fontconfig openjdk-17-jre
+
+3. sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+  
+4. sudo apt-get update
+
+5. sudo apt-get install jenkins
+
+6. sudo systemctl daemon-reload
+
+7. sudo systemctl status jenkins
+
+8. Open any browser and search for localhost:8080
+
+# A default page open put password that belong to given path 
+9. sudo more file path 
+now copy password and paste it on jenkins default Page 
+
+10. Setup Your UserName and Password.

@@ -1,0 +1,54 @@
+Here's how you can perform job chaining in Jenkins:
+
+Method 1: Using Post-Build Actions
+
+    Open Jenkins:
+    Open your Jenkins dashboard in a web browser.
+
+    Navigate to the Job Configuration:
+        If you are creating a new job, click on "New Item" on the Jenkins dashboard.
+        If you are modifying an existing job, click on the job's name.
+
+    Configure the Build Steps:
+        In the job configuration, under the "Build" section, configure the build steps for your job.
+
+    Configure Post-Build Actions:
+        Scroll down to the "Post-Build Actions" section.
+        Click on "Add post-build action" and choose the "Build other projects" option.
+
+    Specify Projects to Build:
+        Enter the names of the projects you want to trigger after the current job (separated by commas).
+
+    Save the Configuration:
+        Scroll to the bottom of the configuration page and click on the "Save" or "Apply" button.
+
+Now, when the current job completes its build, it will trigger the specified projects in the "Build other projects" post-build action.
+
+
+
+
+Method 2: Using Pipeline Script
+
+If you are using Jenkins Pipeline, you can use a scripted or declarative pipeline to define job chaining. Here's an example of a simple scripted pipeline:
+
+groovy
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('Build Job A') {
+            steps {
+                // Your build steps for Job A
+            }
+        }
+        stage('Build Job B') {
+            steps {
+                // Your build steps for Job B
+            }
+        }
+        // Add more stages as needed
+    }
+}
+
+In the above example, Job B will only start if Job A completes successfully. You can extend the pipeline to include more jobs and stages as required.
